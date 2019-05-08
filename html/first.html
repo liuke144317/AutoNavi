@@ -30,19 +30,38 @@
     var flag = true;
     var map = new AMap.Map('container', {
         resizeEnable: true, //是否监控地图容器尺寸变化
-        zoom:11, //初始化地图层级
+        zoom:10, //初始化地图层级
         center: [116.397428, 39.90923], //初始化地图中心点
         layers: [//使用多个图层
-            // new AMap.TileLayer.Satellite(),
+            new AMap.TileLayer.Satellite(),
             // new AMap.TileLayer.RoadNet()
         ],
     });
+    AMap.plugin(['AMap.ToolBar','AMap.Driving','AMap.MouseTool'],function(){//异步加载插件
+        var toolbar = new AMap.ToolBar({
+            offset:new AMap.Pixel(10,30)
+        });
+        map.addControl(toolbar);
+        var mouseTool = new AMap.MouseTool(map)
+        mouseTool.marker();
+        AMap.event.addListener( mouseTool,'draw',function(e){
+            console.log(e.obj.getPath());//获取路径/范围
+        });
+    })
+
     //实时路况图层
     var trafficLayer = new AMap.TileLayer.Traffic({
         zIndex: 10
     });
     map.add(trafficLayer);//添加图层到地图
     trafficLayer.hide();
+
+    /*添加marker*/
+    var maker = new AMap.Marker({
+        position: new AMap.LngLat(116.39, 39.9),
+        title: '北京'
+    })
+    map.add(maker)
    function toggle() {
         if(flag == false){
             trafficLayer.hide();

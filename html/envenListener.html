@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件监听</title>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=60bf17934cf7f76dc7408c7e1b6554fc"></script>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+        .btns{
+            position: absolute;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="btns">
+            <div>
+                <button id="btn1" class="btn1">绑定Marker事件</button>
+                <button id="btn2" class="btn2">解除Marker绑定</button>
+                <button id="btn3" class="btn2">清除点标记</button>
+            </div>
+            <div style="margin-top: 10px">
+                <button>绑定圆圈事件</button>
+                <button>绑定圆圈事件</button>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        var map = new AMap.Map('container',{
+            center:[116.39, 39.9]
+        })
+        var clickListener;
+        var markerArr = [];
+        /*绑定一个可点击屏幕生成点标记的事件*/
+        function banding(){
+            unbanding();
+            clickListener = AMap.event.addListener(map,'click',function (e) {
+                var marker = new AMap.Marker({
+                    position:e.lnglat,
+                    map:map
+                })
+                marker.on('click',function(e){
+                    map.remove(this)
+                })
+                markerArr.push(marker)
+            })
+
+        }
+        /*解除一个可点击屏幕生成点标记的事件*/
+        function unbanding(){
+            if(clickListener){
+                AMap.event.removeListener(clickListener);
+            }
+        }
+        /*清除点标记*/
+        function clear(){
+            map.remove(markerArr)
+            markerArr=[]
+        }
+        var button1 = document.getElementById('btn1')
+        AMap.event.addDomListener(button1,'click',banding);
+        var button2 = document.getElementById('btn2')
+        AMap.event.addDomListener(button2,'click',unbanding);
+        var button3 = document.getElementById('btn3')
+        AMap.event.addDomListener(button3,'click',clear);
+
+    </script>
+</body>
+</html>
