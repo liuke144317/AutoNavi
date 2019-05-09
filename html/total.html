@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高德地图</title>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=60bf17934cf7f76dc7408c7e1b6554fc"></script>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+        .menu{
+            position: fixed;
+            top: 0px;
+            z-index: 10;
+            width: 100%;
+        }
+        .table{
+            width: 80%;
+            height: 200px;
+            background: aqua;
+            margin: 0 auto;
+            transition: height .5s;
+            font-size: 0;
+            border-radius: 3px;
+            box-shadow: 2px 2px 10px #909090;
+            position: relative;
+        }
+        .table:hover,.btn:hover{
+            cursor:default
+        }
+        .left,.right{
+            display: inline-block;
+            height: 200px;
+            font-size: 14px;
+            margin-bottom: 0px;
+            position: absolute;
+            bottom: 0;
+        }
+        .left{
+            width: 20%;
+            background: #1f6377;
+            color:#fff
+        }
+        ul{
+            margin:7px 0;
+        }
+        li{
+            height: 25px;
+        }
+        .right{
+            width: 80%;
+            right: 0px;
+        }
+        .marker{
+            width: 100%;
+            height: 100%;
+            background: bisque;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        .btn{
+            width: 10%;
+            background: olivedrab;
+            margin: 0 auto;
+            padding: 2px 0;
+            text-align: center;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 2px 2px 10px #909090;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="menu">
+            <div class="table">
+                <div class="left">
+                    <ul>
+                        <li>点标记Marker</li>
+                        <li>矢量图形</li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <div class="marker">
+                        <div>
+                            <input type="checkbox" onchange="roadCondition(this)">
+                            <span>显示/隐藏实时路况</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" onchange=" satelliteCondition(this)">
+                            <span>显示/隐藏卫星图层</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" onchange=" bindingMarker(this)">
+                            <span>绑定/解除点击事件</span>
+                        </div>
+                        <div>
+                            <input type="checkbox">
+                            <span>添加/去除缩放插件</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn" onclick="showMenu()">收起</div>
+        </div>
+    </div>
+</body>
+<script src="../js/total.js"></script>
+</html>
