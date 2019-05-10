@@ -32,10 +32,12 @@
             center:[116.39, 39.9],
             zoom: 14
         })
-        var clickListener;
+        var circleArr = [];
+        var polylineEditor;
+        var contextMenu = new AMap.ContextMenu();
+
         var drawCircle = function(e){
-            console.log('e',e);
-            new AMap.Circle({
+            var circle = new AMap.Circle({
                 center: e.lnglat,  // 圆心位置
                 radius: 1000, //半径
                 borderWeight: 3,
@@ -51,6 +53,28 @@
                 zIndex: 50,
                 map:map
             });
+            /*点击矢量图，可以删除和编辑矢量图*/
+            circle.on('click',function(e){
+                var _this = this;
+                contextMenu.open(map, e.lnglat);
+                if(!(0 in contextMenu.B.items)){
+                    contextMenu.addItem("删除", function () {
+                        map.remove(_this)
+                    }, 0);
+                    contextMenu.addItem("编辑", function () {
+                        addplugin(_this)
+                    }, 1);
+                }
+
+            })
+            circleArr.push(circle);
+        }
+        /*添加编辑插件*/
+        function addplugin(_this){
+            map.plugin('AMap.CircleEditor',function(){
+                polylineEditor = new AMap.CircleEditor(map, _this);
+                polylineEditor.open();
+            })
         }
         function binding(){
             map.on('click',drawCircle)

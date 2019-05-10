@@ -54,12 +54,34 @@
             width: 80%;
             right: 0px;
         }
-        .marker{
+        .left li:hover{
+            cursor:pointer;
+            color:yellow;
+        }
+        .marker,.vectorGraph,.routePlanning{
             width: 100%;
             height: 100%;
             background: bisque;
             box-sizing: border-box;
             padding: 20px;
+        }
+        .vectorGraph,.routePlanning{
+            display: none;
+        }
+        .routePlanning_left{
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+            width: 35%;
+        }
+        .routePlanning_right{
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+            width: auto
+        }
+        .routePlanning_right div{
+            margin-top: 5px;
         }
         .btn{
             width: 10%;
@@ -78,34 +100,78 @@
             <div class="table">
                 <div class="left">
                     <ul>
-                        <li>点标记Marker</li>
-                        <li>矢量图形</li>
+                        <li class="lic" onclick="changeTab(0)">点标记Marker</li>
+                        <li class="lic" onclick="changeTab(1)">矢量图形</li>
+                        <li class="lic" onclick="changeTab(2)">路径规划</li>
+                        <li class="lic" onclick="changeTab(3)">热力图</li>
+                        <li class="lic" onclick="changeTab(4)">Echarts</li>
                     </ul>
                 </div>
                 <div class="right">
-                    <!--<div class="marker">
-                        <div>
-                            <input type="checkbox" onchange="roadCondition(this)">
-                            <span>显示/隐藏实时路况</span>
-                        </div>
-                        <div>
-                            <input type="checkbox" onchange=" satelliteCondition(this)">
-                            <span>显示/隐藏卫星图层</span>
-                        </div>
-                        <div>
-                            <input type="checkbox" onchange=" bindingMarker(this)">
-                            <span>绑定/解除点击事件</span>
-                            <button style="border-radius:5px" onclick="clearAllMarker()">清除marker</button>
-                        </div>
-                        <div>
-                            <input type="checkbox" onchange=" bindingToolBar(this)">
-                            <span>添加/去除缩放插件</span>
-                        </div>
-                    </div>-->
+                    <div class="marker">
+                       <div>
+                           <input type="checkbox" onchange="roadCondition(this)">
+                           <span>显示/隐藏实时路况</span>
+                       </div>
+                       <div>
+                           <input type="checkbox" onchange=" satelliteCondition(this)">
+                           <span>显示/隐藏卫星图层</span>
+                       </div>
+                       <div>
+                           <input type="checkbox" onchange=" bindingMarker(this)">
+                           <span>绑定/解除点击事件</span>
+                           <button style="border-radius:5px" onclick="clearAllMarker()">清除marker</button>
+                       </div>
+                       <div>
+                           <input type="checkbox" onchange=" bindingToolBar(this)">
+                           <span>添加/去除缩放插件</span>
+                       </div>
+                   </div>
                     <div class="vectorGraph">
+                        <div>
+                            <input type="radio" name="vector" value="1" checked onclick="changeVector(this)"><span>操作圆形</span>
+                        </div>
+                        <div>
+                            <input type="radio" name="vector" value="2" onclick="changeVector(this)"><span>操作线段</span>
+                        </div>
+                    </div>
+                    <div class="routePlanning">
+                        <div class="routePlanning_left">
+                            <div>
+                                <input type="radio" name="vector" value="1" checked onclick="changeVector(this)"><span>驾车路径规划</span>
+                            </div>
+                            <div>
+                                <input type="radio" name="vector" value="2" onclick="changeVector(this)"><span>公交路径规划</span>
+                            </div>
+                            <div>
+                                <input type="radio" name="vector" value="2" onclick="changeVector(this)"><span>步行路径规划</span>
+                            </div>
+                        </div>
+                        <div class="routePlanning_right">
+                            <div>
+                                <span>起点</span><input id="tipinputstart" type="text">
+                            </div>
+                            <div>
+                                <span>终点</span><input id="tipinputEnd" type="text">
+                            </div>
+                            <div>
+                                <span>类型</span>
+                                <select name="" id="">
+                                    <option value="" selected>请选择</option>
+                                    <option value="">时间最短</option>
+                                    <option value="">路程最短</option>
+                                </select><br>
+                            </div>
+                            <div>
+                                <button onclick="getRoad()">搜索</button>&nbsp;
+                                <button>取消</button>
+                            </div>
+
+                        </div>
 
                     </div>
                 </div>
+
             </div>
             <div class="btn" onclick="showMenu()">收起</div>
         </div>
