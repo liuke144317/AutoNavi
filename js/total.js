@@ -184,10 +184,29 @@ function changeVector(val){
 
 /*驾车路线规划*/
 function getRoad(){
-    console.log('POIstrat',POIstrat);
-    console.log('POIenf',POIenf);
+    var select = document.getElementById('select').value;
+    if(!select){
+        select = 1
+    }
+    var policy;
+    if(select==1){
+        policy = AMap.DrivingPolicy.LEAST_TIME
+    }
+    if(select==2){
+        policy = AMap.DrivingPolicy.LEAST_FEE
+    }
+    if(select==3){
+        policy = AMap.DrivingPolicy.LEAST_DISTANCE
+    }
+    if(select==4){
+        policy = AMap.DrivingPolicy.REAL_TRAFFIC
+    }
+    if(driving){
+        driving.clear();
+    }
     driving = new AMap.Driving({
         map:map,
+        panel: "panel",
         // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
         policy: AMap.DrivingPolicy.LEAST_TIME
     })
@@ -195,10 +214,20 @@ function getRoad(){
     var endLngLat = POIenf
     driving.search(startLngLat, endLngLat, function (status, result) {
         // 未出错时，result即是对应的路线规划方案
-
         /*console.log('status',status);
         console.log('result',result);*/
     })
+    driving.on('complete',function (e) {
+        document.getElementById('panel').style.display = 'block'
+    })
+}
+function clearRoad(){
+    if(driving){
+        driving.clear();
+    }
+    document.getElementById('tipinputstart').value = '';
+    document.getElementById('tipinputEnd').value = '';
+    document.getElementById('panel').style.display = 'none'
 }
 
 /*left中tab切换*/

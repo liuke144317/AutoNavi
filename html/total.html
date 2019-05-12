@@ -92,9 +92,22 @@
             border-radius: 0 0 5px 5px;
             box-shadow: 2px 2px 10px #909090;
         }
+        #panel {
+            position: fixed;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            height: 500px;
+            z-index: 100;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div id="panel"></div>
     <div id="container">
         <div class="menu">
             <div class="table">
@@ -156,15 +169,17 @@
                             </div>
                             <div>
                                 <span>类型</span>
-                                <select name="" id="">
-                                    <option value="" selected>请选择</option>
-                                    <option value="">时间最短</option>
-                                    <option value="">路程最短</option>
+                                <select name="" id="select" onchange="getRoad()">
+                                    <option value="" selected disabled>请选择</option>
+                                    <option value="1">最快捷模式</option>
+                                    <option value="2">最经济模式</option>
+                                    <option value="3">最短距离模式</option>
+                                    <option value="4">考虑实时路况</option>
                                 </select><br>
                             </div>
                             <div>
                                 <button onclick="getRoad()">搜索</button>&nbsp;
-                                <button>取消</button>
+                                <button onclick="clearRoad()">取消</button>
                             </div>
 
                         </div>
