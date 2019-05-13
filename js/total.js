@@ -184,8 +184,6 @@ function changeVector(val){
 
 /*驾车路线规划*/
 function getRoad(){
-    console.log('POIstrat',POIstrat);
-    console.log('POIenf',POIenf);
     driving = new AMap.Driving({
         map:map,
         // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
@@ -195,7 +193,6 @@ function getRoad(){
     var endLngLat = POIenf
     driving.search(startLngLat, endLngLat, function (status, result) {
         // 未出错时，result即是对应的路线规划方案
-
         /*console.log('status',status);
         console.log('result',result);*/
     })
