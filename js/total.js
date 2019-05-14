@@ -127,8 +127,10 @@ var polylineEditor;
 var circleArr = [];
 var contextMenu = new AMap.ContextMenu();
 var _this;
+var pointArr = [];
 contextMenu.addItem("删除", function () {
     map.remove(_this)
+    map.remove(pointArr)
     if(polylineEditor){
         polylineEditor.close()
     }
@@ -169,14 +171,48 @@ var drawCircle = function(e){
         contextMenu.open(map, e.lnglat);
     })
     circleArr.push(circle);
+    showPoints(e.lnglat)
 }
-
+/*画圆触发该事件，遍历传来的坐标，在圆范围内的显现标记*/
+/*参数圆心的经纬度，圆半径和需要遍历比较的点*/
+function showPoints(lnglat,radius){
+    for(var i = 0;i<data.length;i++){
+        if(AMap.GeometryUtil.distance(lnglat,data[i].lnglat)<=1000){
+            var icon;
+            if(data[i].type==1){
+                icon = '../img/hospital.png'
+            }
+            if(data[i].type==2){
+                icon = '../img/school.png'
+            }
+            if(data[i].type==3){
+                icon = '../img/factory.png'
+            }
+            var startIcon = new AMap.Icon({
+                // 图标尺寸
+                size: new AMap.Size(25, 34),
+                // 图标的取图地址
+                image: icon,
+                // 图标所用图片大小
+                imageSize: new AMap.Size(25, 34),
+                // 图标取图偏移量
+                // imageOffset: new AMap.Pixel(-9, -3)
+            });
+            var point = new AMap.Marker({
+                position:data[i].lnglat,
+                map:map,
+                icon:startIcon,
+            })
+            pointArr.push(point)
+        }
+    }
+}
 /*操作线段*/
 function changeVector(val){
-    if(val.value==1){
+    if(val.value==1){/*监听map画圆*/
         map.on('click',drawCircle)
         rule.close(false)
-    }else{
+    }else{/*监听map画线*/
         map.off('click',drawCircle)
         rule.rule()
     }
@@ -184,8 +220,29 @@ function changeVector(val){
 
 /*驾车路线规划*/
 function getRoad(){
+    var select = document.getElementById('select').value;
+    if(!select){
+        select = 1
+    }
+    var policy;
+    if(select==1){
+        policy = AMap.DrivingPolicy.LEAST_TIME
+    }
+    if(select==2){
+        policy = AMap.DrivingPolicy.LEAST_FEE
+    }
+    if(select==3){
+        policy = AMap.DrivingPolicy.LEAST_DISTANCE
+    }
+    if(select==4){
+        policy = AMap.DrivingPolicy.REAL_TRAFFIC
+    }
+    if(driving){
+        driving.clear();
+    }
     driving = new AMap.Driving({
         map:map,
+        panel: "panel",
         // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
         policy: AMap.DrivingPolicy.LEAST_TIME
     })
@@ -196,6 +253,17 @@ function getRoad(){
         /*console.log('status',status);
         console.log('result',result);*/
     })
+    driving.on('complete',function (e) {
+        document.getElementById('panel').style.display = 'block'
+    })
+}
+function clearRoad(){
+    if(driving){
+        driving.clear();
+    }
+    document.getElementById('tipinputstart').value = '';
+    document.getElementById('tipinputEnd').value = '';
+    document.getElementById('panel').style.display = 'none'
 }
 
 /*left中tab切换*/
