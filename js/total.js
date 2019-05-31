@@ -43,7 +43,7 @@ AMap.plugin(['AMap.ToolBar','AMap.MouseTool','AMap.Driving','AMap.Autocomplete']
 
 })
 
-
+/*绑定、移除toolbar*/
 function bindingToolBar(val){
     if(val.checked){/*添加*/
         map.addControl(toolbar);
@@ -51,6 +51,7 @@ function bindingToolBar(val){
         map.removeControl(toolbar)
     }
 }
+/*收放菜单*/
 var show = true;
 function showMenu(){
     if(show == true){
@@ -207,16 +208,49 @@ function showPoints(lnglat,radius){
         }
     }
 }
-/*操作线段*/
+/*操作线段测距*/
 function changeVector(val){
     if(val.value==1){/*监听map画圆*/
         map.on('click',drawCircle)
         rule.close(false)
-    }else{/*监听map画线*/
+    }else if(val.value==2){/*监听map画线*/
         map.off('click',drawCircle)
         rule.rule()
+    }else{/*绘制线段*/
+        map.off('click',drawCircle)
+        rule.close(false)
+        rule.polyline({
+            strokeStyle:'dashed'
+        });
+
     }
 }
+/*画完线后判断点符合与线距离的显示出来*/
+rule.on('draw',function(object){
+    var pathArr = object.obj.getPath();
+    /*遍历所有点，将距离符合条件的点标注出来*/
+    var allPointArr = [];
+    for(key in pathArr){
+        var singlePointArr = [];
+        singlePointArr.push(pathArr[key]['lng'])
+        singlePointArr.push(pathArr[key]['lat'])
+        allPointArr.push(singlePointArr)
+    }
+    var distance = 100;//最远距离
+    for(var i = 0;i<data.length;i++){
+        var dis = AMap.GeometryUtil.distanceToSegment(data[i].lnglat, allPointArr);
+        console.log('dis',dis);
+        if(dis<=distance){
+            console.log('符合条件');
+            var marker = new AMap.Marker({
+                position:data[i].lnglat,
+                map:map
+            })
+        }
+    }
+})
+
+
 
 /*驾车路线规划*/
 function getRoad(){
